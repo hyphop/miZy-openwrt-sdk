@@ -1,17 +1,12 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME_ORG:=game-music-emu
 PKG_NAME:=libgme
 PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME_ORG)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_DIR:=$(PKG_NAME_ORG)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://bitbucket.org/mpyne/game-music-emu/downloads/
-PKG_MAINTAINER:=hyphop
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME_ORG)-$(PKG_VERSION)
-HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME_ORG)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/libgme
+PKG_MAINTAINER:=art
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -31,8 +26,7 @@ define Package/libgme
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=libgme
-#  URL:=https://sourceforge.net/projects/libgme/
-  URL:=https://bitbucket.org/mpyne/game-music-emu/
+  URL:=https://sourceforge.net/projects/libgme/
   DEPENDS:=+libpthread +libstdcpp
 #  DEPENDS:= @BROKEN
 endef

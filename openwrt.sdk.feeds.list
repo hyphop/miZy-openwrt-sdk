@@ -5,7 +5,7 @@
     busybox-mizy
     libmodplug
     opus-tools
-#   vorbis-tools
+    vorbis-tools
     libusb-1.0
     sunxi-tools
     markdown

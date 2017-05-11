@@ -1,0 +1,163 @@
+diff -pruN game-music-emu-0.6.1.original/CMakeLists.txt libgme-0.6.1/CMakeLists.txt
+--- game-music-emu-0.6.1.original/CMakeLists.txt	2016-12-15 08:23:52.000000000 +0700
++++ libgme-0.6.1/CMakeLists.txt	2017-02-27 16:22:14.000000000 +0700
+@@ -90,5 +90,6 @@ endif (CMAKE_COMPILER_IS_GNUCXX)
+ add_subdirectory(gme)
+ 
+ # EXCLUDE_FROM_ALL adds build rules but keeps it out of default build
+-add_subdirectory(player EXCLUDE_FROM_ALL)
+-add_subdirectory(demo EXCLUDE_FROM_ALL)
++# add_subdirectory(player EXCLUDE_FROM_ALL)
++# add_subdirectory(demo EXCLUDE_FROM_ALL)
++add_subdirectory(demo)
+diff -pruN game-music-emu-0.6.1.original/demo/basics.c libgme-0.6.1/demo/basics.c
+--- game-music-emu-0.6.1.original/demo/basics.c	2016-12-15 08:23:52.000000000 +0700
++++ libgme-0.6.1/demo/basics.c	2017-02-27 20:30:13.000000000 +0700
+@@ -2,18 +2,21 @@
+ 
+ #include "gme/gme.h"
+ 
+-#include "Wave_Writer.h" /* wave_ functions for writing sound file */
++//#include "Wave_Writer.h" /* wave_ functions for writing sound file */
+ #include <stdlib.h>
+ #include <stdio.h>
+ 
+ void handle_error( const char* str );
+ 
++int default_songlength = 150;
++
+ int main(int argc, char *argv[])
+ {
+ 	const char *filename = "test.nsf"; /* Default file to open */
+ 	if ( argc >= 2 )
+ 		filename = argv[1];
+ 
++//	long sample_rate = 48000; /* number of samples per second */
+ 	long sample_rate = 44100; /* number of samples per second */
+ 	/* index of track to play (0 = first) */
+ 	int track = argc >= 3 ? atoi(argv[2]) : 0;
+@@ -26,12 +29,82 @@ int main(int argc, char *argv[])
+ 	handle_error( gme_start_track( emu, track ) );
+ 	
+ 	/* Begin writing to wave file */
+-	wave_open( sample_rate, "out.wav" );
+-	wave_enable_stereo();
++//	wave_open( sample_rate, "out.wav" );
++//	wave_enable_stereo();
++	
++
++	int song_len;
++
++	/* Get and print main info for track */
++	{
++		gme_info_t* info;
++		handle_error( gme_track_info( emu, &info, track ) );
++		
++		fprintf( stderr, "System   : %s\n", info->system );
++		fprintf( stderr, "Game     : %s\n", info->game );
++		fprintf( stderr, "Author   : %s\n", info->author );
++		fprintf( stderr, "Copyright: %s\n", info->copyright );
++		fprintf( stderr, "Comment  : %s\n", info->comment );
++		fprintf( stderr, "Dumper   : %s\n", info->dumper );
++		fprintf( stderr, "Tracks   : %d\n", (int) gme_track_count( emu ) );
++		fprintf( stderr, "\n" );
++		fprintf( stderr, "Track    : %d\n", (int) track + 1 );
++		fprintf( stderr, "Name     : %s\n", info->song );
++
++		fprintf( stderr, "Length   : %ld:%02ld",
++				(long) info->length / 1000 / 60, (long) info->length / 1000 % 60 );
++
++		if ( info->loop_length != 0 ) {
++
++	
++		    song_len = ( info->intro_length + 2 * info->loop_length ) / 1000.0; // intro + 2 loops
++
++		    fprintf(stderr,  " (endless) but %d\n", song_len );
++
++		    if (song_len <= 0) {
++			song_len = default_songlength;
++	    	    }
++
++		    fprintf(stderr,  "song_length: %d\n", song_len );
++
++//		    if (song_len <= 0) {
++//			song_len = 150;
++//		    }
++	    	}
++
++		fprintf( stderr,  "\n\n" );
++		
++		gme_free_info( info );
++	}
++
++	/* Print voice names */
++	for ( int i = 0; i < gme_voice_count( emu ); i++ )
++		fprintf(stderr, "Voice %d: %s\n", i, gme_voice_name( emu, i ) );
++	
++	/* Enable most accurate sound emulation */
++	gme_enable_accuracy( emu, 1 );
++	
++	/* Add some stereo enhancement */
++	gme_set_stereo_depth( emu, 0.20 );
+ 	
++	/* Adjust equalizer for crisp, bassy sound */
++	{
++		gme_equalizer_t eq;
++		gme_equalizer( emu, &eq );
++		eq.treble = 0.0;
++		eq.bass   = 20;
++		gme_set_equalizer( emu, &eq );
++	}
++
++
++	gme_set_fade( emu, song_len * 1000L );
++
+ 	/* Record 10 seconds of track */
+-	while ( gme_tell( emu ) < 10 * 1000L )
++//	while ( gme_tell( emu ) < 10 * 1000L )
++//	{
++	while ( !gme_track_ended( emu ) )
+ 	{
++
+ 		/* Sample buffer */
+ 		#define buf_size 1024 /* can be any multiple of 2 */
+ 		short buf [buf_size];
+@@ -40,12 +113,14 @@ int main(int argc, char *argv[])
+ 		handle_error( gme_play( emu, buf_size, buf ) );
+ 		
+ 		/* Write samples to wave file */
+-		wave_write( buf, buf_size );
++		//wave_write( buf, buf_size );
++		fwrite(buf, sizeof(short), buf_size, stdout ) ;
++		fflush(stdout);
+ 	}
+ 	
+ 	/* Cleanup */
+ 	gme_delete( emu );
+-	wave_close();
++//	wave_close();
+ 	
+ 	return 0;
+ }
+@@ -54,7 +129,7 @@ void handle_error( const char* str )
+ {
+ 	if ( str )
+ 	{
+-		printf( "Error: %s\n", str ); getchar();
++		fprintf( stderr, "Error: %s\n", str ); getchar();
+ 		exit( EXIT_FAILURE );
+ 	}
+ }
+diff -pruN game-music-emu-0.6.1.original/demo/CMakeLists.txt libgme-0.6.1/demo/CMakeLists.txt
+--- game-music-emu-0.6.1.original/demo/CMakeLists.txt	2016-12-15 08:23:52.000000000 +0700
++++ libgme-0.6.1/demo/CMakeLists.txt	2017-02-27 16:25:25.000000000 +0700
+@@ -5,7 +5,8 @@
+ include_directories(${CMAKE_SOURCE_DIR}/gme ${CMAKE_SOURCE_DIR})
+ link_directories(${CMAKE_BINARY_DIR}/gme)
+ 
+-add_executable(demo Wave_Writer.cpp basics.c)
++#add_executable(demo Wave_Writer.cpp basics.c)
++add_executable(demo basics.c)
+ 
+ # Add command to copy build file over.
+ add_custom_command(TARGET demo
