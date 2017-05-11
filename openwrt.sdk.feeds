@@ -6,8 +6,11 @@
 
 $test $feeds update -i
 
-for f in `grep -v # $0.list`; do
-    echo "[i] install feed $f"
-    $test $feeds install $f
+action=$1
+[ "$action" = "" ] && action=install
+
+for f in `grep -v \# $0.list`; do
+    echo "[i] $action feed $f"
+    $test $feeds $action $f
 done
 
