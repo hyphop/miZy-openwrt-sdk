@@ -4,4 +4,4 @@
 
 . ./,config 
 
-make -C $src $make_args $@
+$feeds $@

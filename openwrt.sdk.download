@@ -1,12 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 
 ## hyphop ##
 
 . ./,config 
 
 [ -f $squash_src ] || {
+    
+    echo "[i] download $ow_base/$ow_sdk.tar.bz2"
     wget -c -O ../$ow_sdk.tar.bz2 $ow_base/$ow_sdk.tar.bz2
+
     tar -xf ../$ow_sdk.tar.bz2
+
+    echo "[i] tc $ow_sdk/staging_dir/$tc_ow"
+
+    [ -f $tc_squash ] || {
+	mksquashfs $ow_sdk/staging_dir/$tc_ow $tc_squash  -comp xz
+    }
 
     rm -rf $ow_sdk/staging_dir/$tc_ow
     ln -s ../../../$tc $ow_sdk/staging_dir/$tc_ow
@@ -15,6 +24,7 @@
 
     rm -rf $ow_sdk
     rm ../$ow_sdk.tar.bz2
+
 }
 
 [ -f $squash_src ] && {
