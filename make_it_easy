@@ -4,9 +4,11 @@
 
 ## one-line command - easy make 
 
+REP=miZy-openwrt-sdk
+
 usage() { echo "USAGE:
 
-    wget https://raw.githubusercontent.com/hyphop/miZy-openwrt-sdk/master/make_it_easy -O- | sh -
+    wget https://raw.githubusercontent.com/hyphop/$REP/master/make_it_easy -O- | sh -
 
 "
 }
@@ -14,8 +16,8 @@ usage() { echo "USAGE:
 [ -p /tmp/zero_builder ] || mkdir -p /tmp/zero_builder 
 cd /tmp/zero_builder || exit 1
 
-git clone https://github.com/hyphop/miZy-openwrt-sdk.git
-cd miZy-openwrt-sdk  || exit 1
+git clone https://github.com/hyphop/$REP.git
+cd $REP || exit 1
 
 ./openwrt.sdk.download
 ./openwrt.sdk.prepare
