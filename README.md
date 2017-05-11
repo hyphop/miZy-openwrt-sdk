@@ -2,6 +2,7 @@
 
 build openwrt packages for miZy
 
+
 ## Get Source and Prepare
 
     mkdir /tmp/zero_builder
@@ -18,6 +19,11 @@ build openwrt packages for miZy
 ## buid
 
     ./openwrt.sdk.make
+
+
+## Easy make - by one-line command
+
+    wget http://raw.githubusercontent.com/hyphop/miZy-linux-kernel/master/make_it_easy -O- | sh -
 
 ## clean
 
@@ -41,11 +47,10 @@ build openwrt packages for miZy
 
 * busybox-mizy
 * fluidsynth
-* html2text
 * libgme
 * libmodplug
 * markdown
-* markdown.broken
+* html2text
 * sunxi-tools
 * vorbis-tools
 

@@ -4,9 +4,9 @@ PKG_NAME:=libmodplug
 PKG_VERSION:=0.8.8.5
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@SF/libmodplug
-PKG_MAINTAINER:=art
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/modplug-xmms/
+PKG_MAINTAINER:=hyphop
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
