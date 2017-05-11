@@ -1,0 +1,10 @@
+#!/bin/sh
+
+dir=$1
+
+[ "$dir" = "" ] && dir=fake.bin
+
+echo "[i] download feeds source $dir"
+
+dir=$dir ./tools/http
+

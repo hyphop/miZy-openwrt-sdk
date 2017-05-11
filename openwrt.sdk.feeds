@@ -1,0 +1,26 @@
+#!/bin/sh
+
+## hyphop ##
+
+. ./,config 
+
+feeds_list="
+    fluidsynth
+    libgme
+    busybox-mizy
+    libmodplug
+    opus-tools
+    vorbis-tools
+    libusb-1.0
+    sunxi-tools
+    markdown
+    html2text
+"
+
+$feeds update -i
+
+for f in $feeds_list; do
+    echo "[i] install feed $f"
+    $feeds install $f
+done
+

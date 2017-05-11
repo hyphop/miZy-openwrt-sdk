@@ -1,0 +1,183 @@
+#!/usr/bin/perl
+
+## hyphop ##
+
+our $PWD = $ENV{PWD};
+our $VAR = {};
+
+env::load(',config' => $VAR);
+
+#for $i ( keys $VAR ) {
+#    warn "$i: $VAR->{$i}\n";
+#}
+
+
+our @files;
+
+#push @files, split /\n/ => `find bin -name kmod\*`;
+push @files, sort split /\n/ => `find bin -name *.ipk`;
+
+our %PKG = ();
+
+`rm -rf fake.$pkg_dir`;
+
+for my $pkg (@files) {
+    my $pkg_name=$pkg;
+    $pkg_name =~ s{(.+)/}{};
+    my $pkg_dir=$1;
+    my $pkg_size=-s $pkg;
+
+    `mkdir -p fake.$pkg_dir` unless -d fake.$pkg_dir;
+
+    syswrite STDERR, "$pkg_name size: $pkg_size                        \r";
+
+    `rm -rf tmp/*`;
+    `tar -C tmp -xf $pkg`;
+    mkdir "tmp/control";
+    `tar -C tmp/control -xf tmp/control.tar.gz`;
+    open C, "tmp/control/control";
+    my $c;
+    my %C=();
+    my $k;
+    while (<C>) {
+	chomp;
+	$c.=$_;
+	$k=$1 if /(\w+):\s/;
+	if ( defined $C{$k} ) {
+	    $C{$k} .= $';
+	} else {
+	    $C{$k} = $';
+	}
+    }
+
+    if ( $pkg_name =~ /^(kmod|libc_|kernel_|libgcc_|libpthread_|libstdcpp_)/ ) { 
+
+        unlink "tmp/control.tar.gz";
+
+	my @FF;
+	for my $f (glob 'tmp/control/p*') {
+	    $f =~ m{(.+)/};
+	    push @FF, $';
+	    unlink $f;
+	    symlink '/opt/opkg/fake' => $f;
+	}
+
+	push @FF, 'control';
+	my $FF = join " " => @FF;
+
+	`tar -C tmp/control -czf tmp/control.tar.gz $FF`;
+	`rm -rf tmp/control`;
+
+	unlink 'tmp/data.tar.gz';
+	symlink '/opt/opkg/fake.tar.gz' => 'tmp/data.tar.gz';
+	`tar -C tmp -czf fake.$pkg control.tar.gz data.tar.gz debian-binary`;
+	$C{Size} = $pkg_size = -s "fake.$pkg";
+	#warn "[i] $pkg_size\n";
+
+    } else {
+	$C{Size} = -s $pkg;
+	unlink "fake.$pkg";
+	link $pkg => "fake.$pkg";
+    }
+
+    $C{Size} ||= 0;
+    $C{'Installed-Size'} = -s 'tmp/data.tar.gz' || 0;
+
+    $C{Filename} = $pkg_name;
+
+    $cc="";
+    for $k (sort keys %C){
+#	warn "$k: $C{$k}\n";
+	$cc.="$k: $C{$k}\n";
+    }
+
+    $PKG{$pkg_dir} .= $cc . "\n";
+
+}
+
+`rm -rf tmp/*`;
+
+for $p ( sort keys %PKG ) {
+    open P, ">fake.$p/Packages";
+    `gzip -c fake.$p/Packages > fake.$p/Packages.gz`;
+    syswrite P, $PKG{$p};
+    close P;
+}
+
+
+package env;
+
+#~ sub import {
+#~     my $pkg = caller;
+#~     my $n   = shift;
+#~     my $to  = pop;
+#~     $to // $pkg::ENV //= {};
+#~     for (@_) {
+#~         load( $_, $pkg::ENV );
+#~     }
+#~     return;
+#~ }
+
+sub load {
+
+    my $in = shift;
+    my $c  = shift;
+    my $CFG;
+
+    $in =~ /([^\/]+)$/;
+    my $dir = $`;
+
+    unless ( $r = open $CFG, $in ) {
+#        warn "[w] load config $! $in $\n";
+        warn "[w] not load config $dir / $in\n";
+        return undef;
+    }
+
+    local $_;
+    my $found = 0;
+    while ( $_ = <$CFG> ) {
+	load( "$dir$1",$c ) if /^\#include\s+(.+)\n/;
+        next if /^\s*\#/;
+
+        if (/^\s*(export)?\s*(\w+)\s*\=?\s*/) {
+            my $n = $2;
+            my $v = $';
+            $v =~ s/^(\"|\')//;
+            my $q = $1;
+            $v =~ s/\s+$//;
+            $v =~ s/$q$//;
+            $v =~ s/\$\{(\w+)\}/$c->{$1}/eg;
+            $v =~ s/\$(\w+)/$c->{$1}/eg;
+            if ( $v eq '' ) {
+                next;
+            }
+
+            $v =~ s/\\n/\n/sg;
+
+            $found++;
+    #       warn "[$n = $v]\n";
+    
+            $c->{$n} = $v;
+        }
+    }
+    close $CFG;
+    return $found;
+}
+
+1;
+
+#~ Package: kmod-w1
+#~ Version: 4.4.14-1
+#~ Depends: kernel (=4.4.14-1-4864c53b21f936192b513f5735d7fa9f)
+#~ Source: feeds/base/package/kernel/linux
+#~ License: GPLv2
+#~ Section: kernel
+#~ Status: unknown hold not-installed
+#~ Architecture: sunxi
+#~ Installed-Size: 11829
+#~ Filename: kmod-w1_4.4.14-1_sunxi.ipk
+#~ Size: 12565
+#~ MD5Sum: b972e6fed7f2ab40f1b5c6cc807f836d
+#~ SHA256sum: 9da5aa32e26532addb5d6fafee272ff0ccd2bcc294b4fedbf3139d74565bf718
+#~ Description:  Kernel module for Dallas's 1-wire support
+

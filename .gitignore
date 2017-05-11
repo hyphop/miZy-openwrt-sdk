@@ -1,0 +1,9 @@
+openwrt/*
+dl
+bin
+fake.bin
+openwrt.*/*
+logs
+git_*
+syncit*
+tmp

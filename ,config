@@ -1,0 +1,28 @@
+#miZy-openwrt-sdk config
+
+arch=imx6
+arch=sunxi
+
+ow_sdk=OpenWrt-SDK-${arch}_gcc-5.3.0_musl-1.1.16_eabi.Linux-x86_64
+ow_tc=OpenWrt-Toolchain-${arch}_gcc-5.3.0_musl-1.1.16_eabi.Linux-x86_64
+ow_rootfs=openwrt-$arch-generic-rootfs.tar.gz
+ow_base=https://downloads.openwrt.org/snapshots/trunk/$arch/generic
+
+ow_sdk_squash=$ow_sdk.squashfs
+squash_src=../$ow_sdk.squashfs
+
+src=openwrt
+dl=dl
+bin=bin
+
+tc=toolchain-arm_cortex-a9.neon_gcc-5.3.0_musl-1.1.15_eabi
+tc=toolchain-arm_cortex-a8+vfpv3_gcc-5.3.0_musl-1.1.16_eabi
+tc_squash=../$tc.squashfs
+tc_dir=../$tc
+
+tc_ow=toolchain-arm_cortex-a8+vfpv3_gcc-5.3.0_musl-1.1.16_eabi
+tc_dir=$src/staging_dir/$tc_ow
+
+make_args="-j 32"
+
+feeds=$src/scripts/feeds
