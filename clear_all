@@ -6,6 +6,8 @@
 
 echo "[i] safety clear all building data!"
 
+umount $tc_dir_ow
+
 ./umount_overlay
 
 p=.

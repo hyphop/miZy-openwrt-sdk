@@ -37,5 +37,13 @@ grep -q $tc /proc/mounts || {
     mount -o ro $tc_squash $tc_dir
 }
 
+rm -rf $tc_dir_ow
+
+# symlink have troubles 
+#ln -s ../../../$tc $tc_dir_ow
+
+mkdir $tc_dir_ow
+mount --bind $tc_dir $tc_dir_ow
+
 $feeds update
 

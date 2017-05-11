@@ -37,9 +37,8 @@ define Package/libgme
 #  DEPENDS:= @BROKEN
 endef
 
-
-TARGET_LDFLAGS+= \
-    -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+#TARGET_LDFLAGS+= \
+#    -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 #CONFIGURE_ARGS+= \
 #    --disable-rpath
