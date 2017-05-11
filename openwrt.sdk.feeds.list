@@ -1,0 +1,12 @@
+##  miZy feeds list
+##
+    fluidsynth
+    libgme
+    busybox-mizy
+    libmodplug
+    opus-tools
+#   vorbis-tools
+    libusb-1.0
+    sunxi-tools
+    markdown
+    html2text

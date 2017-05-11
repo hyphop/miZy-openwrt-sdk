@@ -4,25 +4,11 @@
 
 . ./,config 
 
-feeds_list="
-    fluidsynth
-    libgme
-    busybox-mizy
-    libmodplug
-    opus-tools
-#   vorbis-tools
-    libusb-1.0
-    sunxi-tools
-    markdown
-    html2text
-"
-
-
 $test $feeds update -i
 
 next_ignore=
 
-for f in $feeds_list; do
+for f in `cat $0.list`; do
 
     case $f in
 	\#)
