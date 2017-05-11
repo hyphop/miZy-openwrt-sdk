@@ -23,7 +23,7 @@ build openwrt packages for miZy
 
 ## Easy make - by one-line command
 
-    wget http://raw.githubusercontent.com/hyphop/miZy-linux-kernel/master/make_it_easy -O- | sh -
+    wget http://raw.githubusercontent.com/hyphop/miZy-openwrt-sdk/master/make_it_easy -O- | sh -
 
 ## clean
 
