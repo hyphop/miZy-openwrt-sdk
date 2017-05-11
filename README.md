@@ -16,7 +16,7 @@ build openwrt packages for miZy
     ./openwrt.sdk.prepare
     ./openwrt.sdk.feeds
 
-## buid
+## build
 
     ./openwrt.sdk.make
 
@@ -44,6 +44,8 @@ build openwrt packages for miZy
     ./openwrt.sdk.make package/libgme/install
 
 ## mizy-feeds
+
+openwrt.sdk.feeds.list
 
 * busybox-mizy
 * fluidsynth
