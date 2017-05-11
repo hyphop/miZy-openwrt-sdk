@@ -6,23 +6,8 @@
 
 $test $feeds update -i
 
-next_ignore=
-
-for f in `cat $0.list`; do
-
-    case $f in
-	\#)
-	next_ignore=1
-	;;
-	\#*)
-	;;
-	*)
-	[ "$next_ignore" ] || { 
-	    echo "[i] install feed $f"
-	    $test $feeds install $f
-	}
-	next_ignore=
-    esac 
-
+for f in `grep -v # $0.list`; do
+    echo "[i] install feed $f"
+    $test $feeds install $f
 done
 
