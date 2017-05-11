@@ -52,12 +52,12 @@ case $ovlmod in
     overlayfs)
     mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level \
 	none $work_dir
-    break
+#    break
     ;;
     aufs)
     mount -t aufs -o br:$rw_level:$ro_level \
 	none $work_dir
-    break
+#    break
     ;;
 esac
 
