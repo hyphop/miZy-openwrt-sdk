@@ -7,20 +7,24 @@
 [ -f $squash_src ] || {
     
     echo "[i] download $ow_base/$ow_sdk.tar.bz2"
-    wget -c -O ../$ow_sdk.tar.bz2 $ow_base/$ow_sdk.tar.bz2
+    wget -q -c -O ../$ow_sdk.tar.bz2 $ow_base/$ow_sdk.tar.bz2
 
+    echo "[i] unpack $ow_sdk.tar.bz2"
     tar -xf ../$ow_sdk.tar.bz2
 
-    echo "[i] tc $ow_sdk/staging_dir/$tc_ow"
-
     [ -f $tc_squash ] || {
+	echo "[i] generate $tc_squash"
 	mksquashfs $ow_sdk/staging_dir/$tc_ow $tc_squash  -comp xz
     }
 
     rm -rf $ow_sdk/staging_dir/$tc_ow
     ln -s ../../../$tc $ow_sdk/staging_dir/$tc_ow
 
+    echo "[i] generate $squash_src"
+
     mksquashfs $ow_sdk $squash_src -comp xz
+
+    echo "[i] clear $ow_sdk*"
 
     rm -rf $ow_sdk
     rm ../$ow_sdk.tar.bz2
