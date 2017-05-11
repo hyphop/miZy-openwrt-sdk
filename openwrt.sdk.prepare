@@ -25,16 +25,14 @@ ln -s ../$dl $src/$dl
 rm -rf $tc_dir
 ln -s ../../../$tc $tc_dir
 
+[ -d $tc_dir ] || mkdir $tc_dir
 
-[ -d ../$tc ] || {
-    mkdir ../$tc
-    [ -f ../$tc_squash ] || {
-	echo "[i] download ../$tc_squash";
+    [ -f $tc_squash ] || {
+	echo "[i] plz download $tc_squash";
 	exit 1
     }
-    mount -o ro ../$tc_squash ../$tc
-}
 
+mount -o ro $tc_squash $tc_dir
 
 $feeds update
 
