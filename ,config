@@ -23,7 +23,7 @@ tc_squash=../$tc.squashfs
 tc_dir=../$tc
 
 tc_ow=$tc_oname
-tc_dir=$src/staging_dir/$tc_ow
+tc_dir_ow=$src/staging_dir/$tc_ow
 
 make_args="-j 32"
 

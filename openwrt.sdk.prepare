@@ -23,7 +23,7 @@ rm -rf $src/$dl
 ln -s ../$dl $src/$dl
 
 rm -rf $tc_dir
-ln -s ../../../$tc $tc_dir
+ln -s ../../../$tc $tc_dir_ow
 
 [ -d $tc_dir ] || mkdir $tc_dir
 
