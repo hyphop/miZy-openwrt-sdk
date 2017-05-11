@@ -1,31 +1,41 @@
 # miZy-openwrt-sdk
 
-    build openwrt packages for miZy
+build openwrt packages for miZy
 
-## get & prepare
+## Get Source and Prepare
 
+    mkdir /tmp/zero_builder
+    cd /tmp/zero_builder
+    
+    git clone https://github.com/hyphop/miZy-openwrt-sdk.git
+    
+    cd miZy-openwrt-sdk
+    
     ./openwrt.sdk.download
     ./openwrt.sdk.prepare
     ./openwrt.sdk.feeds
 
-## install feeds
-
-    ./openwrt/scripts/feeds install libgme
-
 ## buid
 
     ./openwrt.sdk.make
+
+## clean
+
+    ./openwrt.sdk.clean
 
 ## output DIRs
 
     ./dl   - download src packages
     ./bin  - compiled packages
 
+## custom feeds install
+
+    ./openwrt/scripts/feeds install libgme
+
 ## custom package build
 
     ./openwrt.sdk.make package/libgme/configure
     ./openwrt.sdk.make package/libgme/install
-
 
 ## mizy-feeds
 
