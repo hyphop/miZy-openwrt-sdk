@@ -17,9 +17,11 @@ feeds_list="
     html2text
 "
 
-$feeds update -i
+
+$test $feeds update -i
 
 next_ignore=
+
 for f in $feeds_list; do
 
     case $f in
@@ -31,11 +33,10 @@ for f in $feeds_list; do
 	*)
 	[ "$next_ignore" ] || { 
 	    echo "[i] install feed $f"
+	    $test $feeds install $f
 	}
 	next_ignore=
     esac 
-
-    $feeds install $f
 
 done
 
