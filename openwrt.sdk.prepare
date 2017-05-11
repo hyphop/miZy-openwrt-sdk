@@ -22,7 +22,7 @@ ln -s ../$bin $src/$bin
 rm -rf $src/$dl
 ln -s ../$dl $src/$dl
 
-rm -rf $tc_dir
+rm -rf $tc_dir_ow
 ln -s ../../../$tc $tc_dir_ow
 
 [ -d $tc_dir ] || mkdir $tc_dir
@@ -32,7 +32,10 @@ ln -s ../../../$tc $tc_dir_ow
 	exit 1
     }
 
-mount -o ro $tc_squash $tc_dir
+grep -q $tc /proc/mounts || {
+    echo "[i] mount -o ro $tc_squash $tc_dir"
+    mount -o ro $tc_squash $tc_dir
+}
 
 $feeds update
 
