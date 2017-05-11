@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 ## hyphop ##
 
@@ -22,5 +22,6 @@ cd $REP || exit 1
 ./openwrt.sdk.download
 ./openwrt.sdk.prepare
 ./openwrt.sdk.feeds
+./openwrt.sdk.make
 
 
