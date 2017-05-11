@@ -10,7 +10,7 @@ feeds_list="
     busybox-mizy
     libmodplug
     opus-tools
-    vorbis-tools
+#   vorbis-tools
     libusb-1.0
     sunxi-tools
     markdown
@@ -19,8 +19,23 @@ feeds_list="
 
 $feeds update -i
 
+next_ignore=
 for f in $feeds_list; do
-    echo "[i] install feed $f"
+
+    case $f in
+	\#)
+	next_ignore=1
+	;;
+	\#*)
+	;;
+	*)
+	[ "$next_ignore" ] || { 
+	    echo "[i] install feed $f"
+	}
+	next_ignore=
+    esac 
+
     $feeds install $f
+
 done
 
