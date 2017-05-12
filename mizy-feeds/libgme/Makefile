@@ -7,8 +7,8 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME_ORG)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_DIR:=$(PKG_NAME_ORG)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://github.com/hyphop/pkg/releases/download/mirror/,\
-		https://bitbucket.org/mpyne/game-music-emu/downloads/
+PKG_SOURCE_URL:=https://github.com/hyphop/pkg/releases/download/mirror/
+#,\		https://bitbucket.org/mpyne/game-music-emu/downloads/
 PKG_MAINTAINER:=hyphop
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME_ORG)-$(PKG_VERSION)
