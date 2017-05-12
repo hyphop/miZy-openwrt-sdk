@@ -33,9 +33,33 @@ build openwrt packages for miZy
 openwrt sdk require this packages
 
     bison make flex time ash bc python gettext
-    ncurses-dev u-boot-tools squashfs-tools 
+    ncurses-dev u-boot-tools squashfs-tools zlib1g-dev xsltproc
     bzip2 lzma lzop lbzip2 gawk xz-utils aufs-tools 
     subversion git mercurial
+
+<!--
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  libncurses5-dev \
+  gawk \
+  git \
+  subversion \
+  libssl-dev \
+  gettext \
+  unzip \
+  zlib1g-dev \
+  file python \
+  mercurial \
+  flex \
+  quilt \
+  xsltproc \
+  libxml-parser-perl \
+  bzr \
+  ecj \
+  cvs \
+  wget \
+  b43-fwcutter
+-->
 
 ## VM compilation 
 
