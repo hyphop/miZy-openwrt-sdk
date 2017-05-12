@@ -20,7 +20,6 @@ build openwrt packages for miZy
 
     ./openwrt.sdk.make
 
-
 ## Easy make - by one-line command
 
     wget http://raw.githubusercontent.com/hyphop/miZy-openwrt-sdk/master/make_it_easy -O- | sh -
@@ -28,6 +27,19 @@ build openwrt packages for miZy
 ## clean
 
     ./openwrt.sdk.clean
+
+## deps
+
+openwrt sdk require this packages
+
+    bison make flex time ash bc python gettext
+    ncurses-dev u-boot-tools squashfs-tools 
+    lzma lzop lbzip2 gawk xz-utils aufs-tools 
+    subversion git mercurial
+
+## VM compilation 
+
+try special prepared VM with preinstalled all needed packages [https://github.com/hyphop/miZy-builder]
 
 ## output DIRs
 
