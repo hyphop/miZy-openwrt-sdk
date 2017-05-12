@@ -39,7 +39,7 @@ openwrt sdk require this packages
 
 ## VM compilation 
 
-try special prepared VM with preinstalled all needed packages [https://github.com/hyphop/miZy-builder]
+try special prepared VM with preinstalled all needed packages https://github.com/hyphop/miZy-builder
 
 ## output DIRs
 
