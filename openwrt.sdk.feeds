@@ -10,7 +10,7 @@ action=$1
 [ "$action" = "" ] && action=install
 
 for f in `grep -v \# $0.list`; do
-    printf "[i] feed %s %s" $action $f
+    printf "[i] feed %s %s\n" $action $f
     $test $feeds $action $f
 done
 
