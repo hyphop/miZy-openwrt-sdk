@@ -8,8 +8,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/fluidsynth
 PKG_MAINTAINER:=hyphop
 
-PKG_FIXUP:=autoreconf
-PKG_REMOVE_FILES:=autogen.sh aclocal.m4
+#PKG_FIXUP:=autoreconf
+#PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 PKG_BUILD_PARALLEL:=1
 #PKG_INSTALL:=1
 
