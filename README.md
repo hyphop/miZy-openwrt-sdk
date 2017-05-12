@@ -34,7 +34,7 @@ openwrt sdk require this packages
 
     bison make flex time ash bc python gettext
     ncurses-dev u-boot-tools squashfs-tools 
-    lzma lzop lbzip2 gawk xz-utils aufs-tools 
+    bzip2 lzma lzop lbzip2 gawk xz-utils aufs-tools 
     subversion git mercurial
 
 ## VM compilation 
