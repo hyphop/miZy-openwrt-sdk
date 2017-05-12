@@ -67,6 +67,10 @@ compilation / cross-compilation its painfull process sometimes!
 try special prepared and tested VM 
 with preinstalled all necessary packages https://github.com/hyphop/miZy-builder
 
+<!--
+    console=no password=1234 mem=3G ./miZy_builder_vm start
+-->
+
 ## NOTE!
 
 if building process failed try run make again, maybe problem will be solve
