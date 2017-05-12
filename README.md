@@ -63,7 +63,7 @@ RUN apt-get update && apt-get install -y \
 
 ## VM compilation 
 
-compilation / cross-compilation its very pain process sometimes! 
+compilation / cross-compilation its painfull process sometimes! 
 try special prepared and tested VM 
 with preinstalled all necessary packages https://github.com/hyphop/miZy-builder
 
