@@ -63,7 +63,12 @@ RUN apt-get update && apt-get install -y \
 
 ## VM compilation 
 
-try special prepared VM with preinstalled all needed packages https://github.com/hyphop/miZy-builder
+Sometimes compilation very pain process! try special prepared tested VM 
+with preinstalled all needed packages https://github.com/hyphop/miZy-builder
+
+## NOTE!
+
+if building process failed try run make again, maybe problem will be solve
 
 ## output DIRs
 
