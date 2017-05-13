@@ -31,3 +31,4 @@ make_args="-j 32"
 
 feeds=$src/scripts/feeds
 
+trys="1 2 3"
