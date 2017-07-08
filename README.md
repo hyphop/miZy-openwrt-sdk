@@ -101,6 +101,7 @@ openwrt.sdk.feeds.list
 * html2text
 * sunxi-tools
 * vorbis-tools
+* mkexfat
 
 ## miZy 
  
