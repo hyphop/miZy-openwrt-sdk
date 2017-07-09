@@ -63,6 +63,8 @@ case $ovlmod in
     mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level \
 	none $work_dir
 #    break
+#   new version need fix
+#	overlayfs: missing 'workdir'
     ;;
     aufs)
     mount -t aufs -o br:$rw_level:$ro_level \
