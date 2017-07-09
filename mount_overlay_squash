@@ -62,7 +62,7 @@ case $ovlmod in
     overlayfs)
 
 	ver4=
-	modinfo overlayfs | egrep "vermagic:\s+4" && ver4=",workdir=$work_dir"
+	modinfo overlayfs | egrep -q "vermagic:\s+4" && ver4=",workdir=$work_dir"
 
     mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level$ver4 \
 	none $work_dir
