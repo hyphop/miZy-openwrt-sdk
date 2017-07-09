@@ -61,21 +61,12 @@ mount -o ro $sfs $ro_level
 case $ovlmod in  
     overlayfs)
 
-	modinfo overlayfs | egrep "vermagic:\s+4" && ver4=1
+	ver4=
+	modinfo overlayfs | egrep "vermagic:\s+4" && ver4=",workdir=$work_dir"
 
-	[ "$ver4" ] || { 
-    mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level \
+    mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level$ver4 \
 	none $work_dir
-	}
-
-	[ "$ver4" ] && { 
-    mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level\
-	,workdir=$work_dir none $work_dir
-	}
-
 #    break
-#   new version need fix
-#	overlayfs: missing 'workdir'
     ;;
     aufs)
     mount -t aufs -o br:$rw_level:$ro_level \
