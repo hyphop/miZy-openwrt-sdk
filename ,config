@@ -27,8 +27,11 @@ tc_dir=../$tc
 tc_ow=$tc_oname
 tc_dir_ow=$src/staging_dir/$tc_ow
 
-make_args="-j 32"
+make_args="-j 32"   # buggy
+make_args=""		#	
 
 feeds=$src/scripts/feeds
 
-trys="1 2 3"
+trys="1 2 3"      # fix make -jX fails
+trys="1"
+
