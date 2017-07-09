@@ -10,7 +10,7 @@
 
 echo "[i] trys: $trys"
 
-for n in trys; do
+for n in $trys; do
 	echo "[i] try $n"
     make -C $src $make_args $@ && exit 0
     [ "$n" = "$trys" ] || {
