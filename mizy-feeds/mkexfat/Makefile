@@ -23,8 +23,8 @@ define Package/mkexfat
     SECTION:=utils
     CATEGORY:=Utilities
     TITLE:=mkexfat
-    DEPENDS:=+libfuse
 endef
+#    DEPENDS:=+libfuse
 
 
 #MAKE_FLAGS += \
