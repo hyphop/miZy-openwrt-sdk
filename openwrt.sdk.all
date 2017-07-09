@@ -4,6 +4,6 @@
 ./openwrt.sdk.prepare
 ./openwrt.sdk.feeds
 
-./openwrt.sdk.make
+./openwrt.sdk.make 
 
 

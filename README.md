@@ -67,6 +67,14 @@ compilation / cross-compilation its painfull process sometimes!
 try special prepared and tested VM 
 with preinstalled all necessary packages https://github.com/hyphop/miZy-builder
 
+	# working tested vm
+	ver=jessie ./miZy_builder_vm_generate  yes  # debian jessie
+	# or 
+	ver=xenial ./miZy_builder_vm_generate  yes  # ubuntu xenial
+
+	https://github.com/hyphop/miZy-builder/releases/download/vm1/miZyBldr.jessie.squashfs
+	https://github.com/hyphop/miZy-builder/releases/download/vm1/miZyBldr.xenial.squashfs
+
 <!--
     console=no password=1234 mem=3G ./miZy_builder_vm start
 -->
