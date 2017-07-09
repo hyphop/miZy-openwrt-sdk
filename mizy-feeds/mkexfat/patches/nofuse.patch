@@ -1,6 +1,6 @@
 diff -pruN exfat/Makefile.am exfat2/Makefile.am
---- exfat/Makefile.am	2017-07-09 21:38:10.268000000 +0000
-+++ exfat2/Makefile.am	2017-07-09 21:35:39.288000000 +0000
+--- exfat/Makefile.am	2017-07-09 21:49:35.600000000 +0000
++++ exfat2/Makefile.am	2017-07-09 21:50:37.172000000 +0000
 @@ -20,4 +20,4 @@
  #	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  #
@@ -8,9 +8,13 @@ diff -pruN exfat/Makefile.am exfat2/Makefile.am
 -SUBDIRS = libexfat dump fsck fuse label mkfs
 +SUBDIRS = libexfat fsck label mkfs
 diff -pruN exfat/configure.ac exfat2/configure.ac
---- exfat/configure.ac	2017-07-09 21:38:10.268000000 +0000
-+++ exfat2/configure.ac	2017-07-09 21:35:59.912000000 +0000
-@@ -35,9 +35,7 @@ PKG_CHECK_MODULES([FUSE], [fuse])
+--- exfat/configure.ac	2017-07-09 21:49:35.600000000 +0000
++++ exfat2/configure.ac	2017-07-09 21:50:15.792000000 +0000
+@@ -31,13 +31,10 @@ AC_PROG_CC_C99
+ AC_PROG_RANLIB
+ AM_PROG_AR
+ AC_SYS_LARGEFILE
+-PKG_CHECK_MODULES([FUSE], [fuse])
  AC_CONFIG_HEADERS([libexfat/config.h])
  AC_CONFIG_FILES([
  	libexfat/Makefile
