@@ -10,25 +10,35 @@ grep squashfs /proc/filesystems 1>/dev/null || {
     exit 1
 }
 
-ovlmod=overlayfs
+#ovlmod=overlayfs
+ovlmod=
 
 grep overlayfs /proc/filesystems 1>/dev/null || modprobe overlayfs 2>/dev/null 
-grep overlayfs /proc/filesystems 1>/dev/null || { 
-    echo "[w] not have overlayfs"
-    ovlmod=""
+grep overlayfs /proc/filesystems 1>/dev/null && ovlmod=overlayfs
+
+#grep overlayfs /proc/filesystems 1>/dev/null || { 
+#    echo "[w] not have overlayfs"
+#    ovlmod=""
 
     grep aufs /proc/filesystems 1>/dev/null || modprobe aufs
 
-    grep aufs /proc/filesystems 1>/dev/null || { 
-	echo "[e] not have aufs"
-        exit 1
-    }
-    ovlmod=aufs
+#  grep aufs /proc/filesystems 1>/dev/null || { 
+#       echo "[e] not have aufs"
+#       exit 1
+#  }
 
-}
+    grep aufs /proc/filesystems 1>/dev/null && ovlmod=aufs
+
+
+#}
 
 #override mode
 #ovlmod=aufs
+
+[ "$ovlmod" ] || {
+    echo "[e] not have any overlay fs (aufs overlayfs)" 1>&2
+	exit 1
+}
  
 p=$PWD
 p=.
