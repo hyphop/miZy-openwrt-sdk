@@ -1,0 +1,11 @@
+diff -pruN mpd-0.20.9/src/lib/curl/Request.cxx mpd-0.20.9.2/src/lib/curl/Request.cxx
+--- mpd-0.20.9/src/lib/curl/Request.cxx	2017-05-08 14:39:19.000000000 +0000
++++ mpd-0.20.9.2/src/lib/curl/Request.cxx	2017-07-16 16:57:29.000000000 +0000
+@@ -63,6 +63,7 @@ CurlRequest::CurlRequest(CurlGlobal &_gl
+ 	easy.SetOption(CURLOPT_NOSIGNAL, 1l);
+ 	easy.SetOption(CURLOPT_CONNECTTIMEOUT, 10l);
+ 	easy.SetOption(CURLOPT_URL, url);
++        easy.SetOption(CURLOPT_VERBOSE, 1L);
+ }
+ 
+ CurlRequest::~CurlRequest()

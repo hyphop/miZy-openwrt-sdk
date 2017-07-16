@@ -1,0 +1,11 @@
+diff -pruN mpd-0.20.9/src/decoder/plugins/FfmpegDecoderPlugin.cxx mpd-0.20.9.2/src/decoder/plugins/FfmpegDecoderPlugin.cxx
+--- mpd-0.20.9/src/decoder/plugins/FfmpegDecoderPlugin.cxx	2017-06-03 18:57:35.000000000 +0000
++++ mpd-0.20.9.2/src/decoder/plugins/FfmpegDecoderPlugin.cxx	2017-07-16 16:18:22.468000000 +0000
+@@ -886,6 +886,7 @@ static const char *const ffmpeg_suffixes
+ 	"aifc", "aiff", "al", "alaw", "amr", "anim", "apc", "ape", "asf",
+ 	"atrac", "au", "aud", "avi", "avm2", "avs", "bap", "bfi", "c93", "cak",
+ 	"cin", "cmv", "cpk", "daud", "dct", "divx", "dts", "dv", "dvd", "dxa",
++	"dsf","alac",
+ 	"eac3", "film", "flac", "flc", "fli", "fll", "flx", "flv", "g726",
+ 	"gsm", "gxf", "iss", "m1v", "m2v", "m2t", "m2ts",
+ 	"m4a", "m4b", "m4v",

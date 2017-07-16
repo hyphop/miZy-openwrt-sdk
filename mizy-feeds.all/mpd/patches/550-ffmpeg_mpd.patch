@@ -1,0 +1,24 @@
+diff -pruN mpd-0.20.9/src/input/plugins/FfmpegInputPlugin.cxx mpd-0.20.9.2/src/input/plugins/FfmpegInputPlugin.cxx
+--- mpd-0.20.9/src/input/plugins/FfmpegInputPlugin.cxx	2017-05-08 14:46:54.000000000 +0000
++++ mpd-0.20.9.2/src/input/plugins/FfmpegInputPlugin.cxx	2017-07-16 17:48:01.000000000 +0000
+@@ -85,13 +85,13 @@ static InputStream *
+ input_ffmpeg_open(const char *uri,
+ 		  Mutex &mutex, Cond &cond)
+ {
+-	if (!StringStartsWith(uri, "gopher://") &&
+-	    !StringStartsWith(uri, "rtp://") &&
+-	    !StringStartsWith(uri, "rtsp://") &&
+-	    !StringStartsWith(uri, "rtmp://") &&
+-	    !StringStartsWith(uri, "rtmpt://") &&
+-	    !StringStartsWith(uri, "rtmps://"))
+-		return nullptr;
++//	if (!StringStartsWith(uri, "gopher://") &&
++//	    !StringStartsWith(uri, "rtp://") &&
++//	    !StringStartsWith(uri, "rtsp://") &&
++//	    !StringStartsWith(uri, "rtmp://") &&
++//	    !StringStartsWith(uri, "rtmpt://") &&
++//	    !StringStartsWith(uri, "rtmps://"))
++//		return nullptr;
+ 
+ 	AVIOContext *h;
+ 	auto result = avio_open(&h, uri, AVIO_FLAG_READ);

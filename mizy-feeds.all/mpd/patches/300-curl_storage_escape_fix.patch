@@ -1,0 +1,235 @@
+diff -pruN mpd-0.20.9/src/storage/plugins/CurlStorage.cxx mpd-0.20.9.2/src/storage/plugins/CurlStorage.cxx
+--- mpd-0.20.9/src/storage/plugins/CurlStorage.cxx	2017-06-04 10:39:09.000000000 +0000
++++ mpd-0.20.9.2/src/storage/plugins/CurlStorage.cxx	2017-07-16 15:14:28.000000000 +0000
+@@ -44,6 +44,7 @@
+ #include <list>
+ 
+ #include <assert.h>
++#include "Escape.c"
+ 
+ class CurlStorage final : public Storage {
+ 	const std::string base;
+@@ -69,6 +70,25 @@ public:
+ 	const char *MapToRelativeUTF8(const char *uri_utf8) const noexcept override;
+ };
+ 
++void ReplaceStringInPlace(std::string& subject, const std::string& search,
++                          const std::string& replace) {
++    size_t pos = 0;
++    while ((pos = subject.find(search, pos)) != std::string::npos) {
++         subject.replace(pos, search.length(), replace);
++         pos += replace.length();
++    }
++}
++
++std::string ReplaceString(std::string subject, const std::string& search,
++                          const std::string& replace) {
++    size_t pos = 0;
++    while ((pos = subject.find(search, pos)) != std::string::npos) {
++         subject.replace(pos, search.length(), replace);
++         pos += replace.length();
++    }
++    return subject;
++}
++
+ std::string
+ CurlStorage::MapUTF8(const char *uri_utf8) const noexcept
+ {
+@@ -77,9 +97,16 @@ CurlStorage::MapUTF8(const char *uri_utf
+ 	if (StringIsEmpty(uri_utf8))
+ 		return base;
+ 
++	char uri_esc[4096];
++	
+ 	// TODO: escape the given URI
++	
++	//// fprintf(stderr, "} %s | %s\n",  base.c_str(), uri_utf8 );
++	
++//	return PathTraitsUTF8::Build(base.c_str(), uri_utf8);
++	return PathTraitsUTF8::Build(base.c_str(),
++	    uri_escape2(uri_utf8, uri_esc, 0 ));
+ 
+-	return PathTraitsUTF8::Build(base.c_str(), uri_utf8);
+ }
+ 
+ const char *
+@@ -87,7 +114,12 @@ CurlStorage::MapToRelativeUTF8(const cha
+ {
+ 	// TODO: escape/unescape?
+ 
+-	return PathTraitsUTF8::Relative(base.c_str(), uri_utf8);
++	//// fprintf(stderr, "{ %s | %s\n",  base.c_str(), uri_utf8);
++	char uri_esc[4096];
++
++//	return PathTraitsUTF8::Relative(base.c_str(), uri_utf8);
++	return PathTraitsUTF8::Relative(base.c_str(),
++	    uri_escape2(uri_utf8, uri_esc, 0 ));
+ }
+ 
+ class BlockingHttpRequest : protected CurlResponseHandler, DeferredMonitor {
+@@ -253,7 +285,8 @@ ParseU64(const char *s, size_t length)
+  */
+ class PropfindOperation : BlockingHttpRequest, CommonExpatParser {
+ 	CurlSlist request_headers;
+-	CurlRequestBody request_body;
++// hyphop //
++//	CurlRequestBody request_body;
+ 
+ 	enum class State {
+ 		ROOT,
+@@ -270,17 +303,19 @@ class PropfindOperation : BlockingHttpRe
+ public:
+ 	PropfindOperation(CurlGlobal &_curl, const char *_uri, unsigned depth)
+ 		:BlockingHttpRequest(_curl, _uri),
+-		 CommonExpatParser(ExpatNamespaceSeparator{'|'}),
+-		 request_body(request,
+-			      "<?xml version=\"1.0\"?>\n"
+-			      "<a:propfind xmlns:a=\"DAV:\">"
+-			      "<a:prop><a:getcontenttype/></a:prop>"
+-			      "<a:prop><a:getcontentlength/></a:prop>"
+-			      "</a:propfind>")
++		 CommonExpatParser(ExpatNamespaceSeparator{'|'})
++// hyphop //
++// no need
++//		 request_body(request,
++//			      "<?xml version=\"1.0\"?>\n"
++//			      "<a:propfind xmlns:a=\"DAV:\">"
++//			      "<a:prop><a:getcontenttype/></a:prop>"
++//			      "<a:prop><a:getcontentlength/></a:prop>"
++///			      "</a:propfind>")
+ 	{
+ 		request.SetOption(CURLOPT_CUSTOMREQUEST, "PROPFIND");
+-
+ 		char buffer[40];
++		//// fprintf(stderr, ">> %s\n", _uri);
+ 		sprintf(buffer, "depth: %u", depth);
+ 		request_headers.Append(buffer);
+ 
+@@ -309,9 +344,13 @@ private:
+ 						 status);
+ 
+ 		auto i = headers.find("content-type");
+-		if (i == headers.end() ||
+-		    strncmp(i->second.c_str(), "text/xml", 8) != 0)
+-			throw std::runtime_error("Unexpected Content-Type from WebDAV server");
++// hyphop //
++//  ignore content type 
++//		if (i == headers.end() 
++//		    || strncmp(i->second.c_str(), "text/xml", 8) != 0
++//			application/xml", 8) != 0
++//			)
++//			throw std::runtime_error("Unexpected Content-Type from WebDAV server");
+ 	}
+ 
+ 	void OnData(ConstBuffer<void> _data) final {
+@@ -468,7 +507,10 @@ CurlStorage::GetInfo(const char *uri_utf
+ 	// TODO: escape the given URI
+ 
+ 	std::string uri = base;
+-	uri += uri_utf8;
++	char uri_esc[4096];
++
++//	uri += uri_utf8;
++	uri += uri_escape2(uri_utf8, uri_esc, 0 );
+ 
+ 	return HttpGetInfoOperation(*curl, uri.c_str()).Perform();
+ }
+@@ -519,8 +561,12 @@ private:
+ 		path = StringAfterPrefix(path, base_path.c_str());
+ 		if (path == nullptr || *path == 0)
+ 			return nullptr;
+-
++		// hyphop
++		path=curl_unescape(path,0);
+ 		const char *slash = strchr(path, '/');
++
++		//// fprintf(stderr, "+ %s * %s\n", path, slash);
++
+ 		if (slash == nullptr)
+ 			/* regular file */
+ 			return path;
+@@ -565,7 +611,11 @@ CurlStorage::OpenDirectory(const char *u
+ 	// TODO: escape the given URI
+ 
+ 	std::string uri = base;
+-	uri += uri_utf8;
++
++	char uri_esc[4096];
++
++//	uri += uri_utf8;
++	uri += uri_escape2(uri_utf8, uri_esc, 0 );
+ 
+ 	/* collection URIs must end with a slash */
+ 	if (uri.back() != '/')
+diff -pruN mpd-0.20.9/src/storage/plugins/Escape.c mpd-0.20.9.2/src/storage/plugins/Escape.c
+--- mpd-0.20.9/src/storage/plugins/Escape.c	1970-01-01 00:00:00.000000000 +0000
++++ mpd-0.20.9.2/src/storage/plugins/Escape.c	2017-07-16 15:08:13.000000000 +0000
+@@ -0,0 +1,68 @@
++
++// hyphop //
++
++static char hex_chars[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
++static char escapes[256] = 
++/*  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f */
++{
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 
++    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 
++    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
++    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
++};
++
++//
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//     !  "  #  $  %  &  '  (  )  *  +  ,  -  .  /  
++//  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?  
++//  @  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  
++//  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _  
++//  `  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  
++//  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++//  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  о  
++
++char * uri_escape2 ( const char *s, char *d, int l) {
++
++    int dlen=0;
++
++    if ( l == 0 ) {
++	l = strlen(s);
++    }
++
++    for (int i = 0; i < l; i++){
++//    if ( s[i] == ' ' ){
++//	d[dlen++] = '+';
++//    } else	
++    if (escapes[ s[i] ]){
++        d[dlen++] = '%';
++        d[dlen++] = hex_chars[s[i]>>4];
++        d[dlen++] = hex_chars[s[i]%16];
++    }
++    else{
++        d[dlen++] = s[i];
++    }
++    }
++    d[dlen] = '\0'; /*  for sure; */
++    return d;
++}
++
