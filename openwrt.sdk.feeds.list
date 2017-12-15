@@ -1,13 +1,13 @@
 ## miZy feeds 
 
-    busybox-mizy
-    fluidsynth
-    libgme
-    libmodplug
-    opus-tools
-    vorbis-tools
-    libusb-1.0
+#    busybox-mizy
+#    fluidsynth
+#    libgme
+#    libmodplug
+#    opus-tools
+#    vorbis-tools
+#    libusb-1.0
     sunxi-tools
-    markdown
-    html2text
-	mkexfat
+#    markdown
+#    html2text
+#	mkexfat
