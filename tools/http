@@ -84,6 +84,7 @@ do {
       || die "[e] create $engine $addr_port";
 
     chdir($dir);
+    $dir='./';
     my $CWD = readlink "/proc/$$/cwd";    # linux only
 
     warn qq{
@@ -95,14 +96,8 @@ do {
 };
 
 
-    our $chdir = 1;
 
     while (1) {
-
-	if ($chdir) {
-	    chdir $dir;
-	    $chdir=0;
-	}
 
         my ( $c, $user_addr ) = $d->accept;
         last unless $c;
@@ -113,34 +108,35 @@ do {
             $req =~ /\r?\n\r?\n/;
             my $p = substr $r->uri->path, 1;
             $p =~ s/\.\.\///g;    # need for some secure )
+            $p =~ s/\/+$//g;    # fix
 
-            if ( -f $p ) {
+	    my $P= "$dir$p";
+            if ( -f $P ) {
                 my $t0 = [gettimeofday];
                 printf $LOG
                   '[%s] %s %s "%s"' => now(),
-                  $user_ip, get_file => $p;
-                $c->send_file_response($p);
+                  $user_ip, get_file => $P;
+                $c->send_file_response($P);
                 printf $LOG " %s bytes, time duration %.2f\n",
-                  ( -s $p ), tv_interval($t0);
+                  ( -s $P ), tv_interval($t0);
                 next;
             }
             else {
-		my $t = "./$p";
-		if ( -d $t ) {
-		    chdir $t; $chdir=1;
-		    warn "[D] $t\n";
-		    opendir $D, $t;
+		if ( -d $P ) {
+		    warn "[D] $P\n";
+		    opendir $D, $P;
 		    my @D;
 		    my @F;
-		    while ( my $d = readdir $D ) {
-			next if $d =~ /^\./;
-			my $t2 = "$d";
+		    while ( my $i = readdir $D ) {
+			next if $i =~ /^\./;
+			my $t2 = "$P/$i";
+#			warn "[i] $t2\n";
 			if ( -d $t2 ) {
-			    warn "[d] $t2\n";
-			    push @D, $d 
+#			    warn "[d] $t2\n";
+			    push @D, $i 
 			} elsif ( -f $t2 ) { 
-			    warn "[f] $t2\n";
-			    push @F, $d 
+#			    warn "[f] $t2\n";
+			    push @F, $i
 			}
 		    };
 		    close D;
