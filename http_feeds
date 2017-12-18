@@ -14,5 +14,5 @@ perl -c $http 2>/dev/null || {
 
 }
 
-dir=$dir $http
+dir=$dir $http "$@"
 
