@@ -6,5 +6,13 @@ dir=$1
 
 echo "[i] download feeds source $dir"
 
-dir=$dir ./tools/http
+http=./tools/http
+perl -c $http 2>/dev/null || {
+
+    echo "[e] run / try to fix it";
+    cpan -fi HTTP::Daemon
+
+}
+
+dir=$dir $http
 

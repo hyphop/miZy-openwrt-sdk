@@ -41,8 +41,8 @@ sub daemon {
 
 our $PID_FILE = "/tmp/http.pid";
 
-$SIG{$_} = sub { warn "[i] stop by $_[0]\n"; unlink $PID_FILE; exit 0 }
-  for qw/INT TERM DIE/;
+$SIG{$_} = sub { warn "[i] stop by:\n$_[0]\n"; unlink $PID_FILE; exit 0 }
+  for qw/INT TERM  __DIE__/;
 $SIG{PIPE} = sub { 0 && warn "[i] pipe broken\n" };
 $SIG{HUP} = sub { warn "[i] hup\n"; daemon };
 
