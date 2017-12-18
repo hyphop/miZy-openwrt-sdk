@@ -35,3 +35,4 @@ feeds=$src/scripts/feeds
 trys="1 2 3"      # fix make -jX fails
 trys="1"
 
+tmp=tmp

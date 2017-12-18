@@ -18,6 +18,9 @@ our @files;
 push @files, sort split /\n/ => `find bin -name *.ipk`;
 
 our %PKG = ();
+our $tmp="/tmp/mizi_openwrt_sdk_tmp";
+mkdir $tmp unless -d $tmp;
+symlink $tmp => 'tmp' unless -l 'tmp';
 
 `rm -rf fake.$pkg_dir`;
 
