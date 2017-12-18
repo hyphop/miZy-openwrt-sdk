@@ -1,0 +1,51 @@
+#!/bin/bash
+
+## hyphop ##
+
+##
+
+. ./,config 
+
+./mount_overlay_squash
+
+#echo "src-git base git://git.openwrt.org/openwrt.git
+#src-git packages https://github.com/openwrt/packages.git
+#src-link mizy ../../mizy-feeds
+#" > $src/feeds.conf 
+#
+#feeds="$src/scripts/feeds"
+#
+#[ -d $bin ] || mkdir $bin
+#[ -d $dl  ] || mkdir $dl
+
+rm -rf $src/$bin
+ln -s ../$bin $src/$bin
+
+rm -rf $src/$dl
+ln -s ../$dl $src/$dl
+
+rm -rf $tc_dir_ow
+ln -s ../../../$tc $tc_dir_ow
+
+[ -d $tc_dir ] || mkdir $tc_dir
+
+    [ -f $tc_squash ] || {
+	echo "[i] plz download $tc_squash";
+	exit 1
+    }
+
+grep -q $tc /proc/mounts || {
+    echo "[i] mount -o ro $tc_squash $tc_dir"
+    mount -o ro $tc_squash $tc_dir
+}
+
+rm -rf $tc_dir_ow
+
+# symlink have troubles 
+#ln -s ../../../$tc $tc_dir_ow
+
+mkdir $tc_dir_ow
+mount --bind $tc_dir $tc_dir_ow
+
+#$feeds update
+
