@@ -19,6 +19,7 @@ TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += -O3 -ffast-math -funroll-all-loops -mfpu=neon-vfpv4 -march=armv7-a -mtune=cortex-a9
 
 define Package/fluidsynth
   SECTION:=sound
@@ -32,6 +33,8 @@ endef
 
 CONFIGURE_ARGS+= \
     --disable-dbus-support \
+    --disable-oss-support \
+    --disable-jack-support \
     --disable-pulse-support
 
 define Package/fluidsynth/install

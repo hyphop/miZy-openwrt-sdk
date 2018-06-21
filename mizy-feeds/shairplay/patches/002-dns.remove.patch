@@ -1,0 +1,66 @@
+diff -pruN shairplay-2016-01-01/src/shairplay.c shairplay-2016-01-02/src/shairplay.c
+--- shairplay-2016-01-01/src/shairplay.c	2018-01-13 06:11:29.000000000 +0000
++++ shairplay-2016-01-02/src/shairplay.c	2018-01-13 06:20:38.104943844 +0000
+@@ -32,7 +32,7 @@
+ # include <windows.h>
+ #endif
+ 
+-#include <shairplay/dnssd.h>
++//#include <shairplay/dnssd.h>
+ #include <shairplay/raop.h>
+ 
+ #include <ao/ao.h>
+@@ -314,8 +314,8 @@ main(int argc, char *argv[])
+ {
+ 	shairplay_options_t options;
+ 	ao_device *device = NULL;
+-
+-	dnssd_t *dnssd;
++// hyphop // remove dns deps 
++//	dnssd_t *dnssd;
+ 	raop_t *raop;
+ 	raop_callbacks_t raop_cbs;
+ 	char *password = NULL;
+@@ -363,19 +363,19 @@ main(int argc, char *argv[])
+ 	raop_set_log_level(raop, RAOP_LOG_DEBUG);
+ 	raop_start(raop, &options.port, options.hwaddr, sizeof(options.hwaddr), password);
+ 
+-	error = 0;
+-	dnssd = dnssd_init(&error);
+-	if (error) {
+-		fprintf(stderr, "ERROR: Could not initialize dnssd library!\n");
+-		fprintf(stderr, "------------------------------------------\n");
+-		fprintf(stderr, "You could try the following resolutions based on your OS:\n");
+-		fprintf(stderr, "Windows: Try installing http://support.apple.com/kb/DL999\n");
+-		fprintf(stderr, "Debian/Ubuntu: Try installing libavahi-compat-libdnssd-dev package\n");
+-		raop_destroy(raop);
+-		return -1;
+-	}
++	error = 0;
++//	dnssd = dnssd_init(&error);
++//	if (error) {
++//		fprintf(stderr, "ERROR: Could not initialize dnssd library!\n");
++//		fprintf(stderr, "------------------------------------------\n");
++//		fprintf(stderr, "You could try the following resolutions based on your OS:\n");
++//		fprintf(stderr, "Windows: Try installing http://support.apple.com/kb/DL999\n");
++//		fprintf(stderr, "Debian/Ubuntu: Try installing libavahi-compat-libdnssd-dev package\n");
++//		raop_destroy(raop);
++//		return -1;
++//	}
+ 
+-	dnssd_register_raop(dnssd, options.apname, options.port, options.hwaddr, sizeof(options.hwaddr), 0);
++//	dnssd_register_raop(dnssd, options.apname, options.port, options.hwaddr, sizeof(options.hwaddr), 0);
+ 
+ 	running = 1;
+ 	while (running) {
+@@ -386,8 +386,8 @@ main(int argc, char *argv[])
+ #endif
+ 	}
+ 
+-	dnssd_unregister_raop(dnssd);
+-	dnssd_destroy(dnssd);
++//	dnssd_unregister_raop(dnssd);
++//	dnssd_destroy(dnssd);
+ 
+ 	raop_stop(raop);
+ 	raop_destroy(raop);

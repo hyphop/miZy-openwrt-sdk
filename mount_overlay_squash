@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## hyphop ## 
 
@@ -10,36 +10,20 @@ grep squashfs /proc/filesystems 1>/dev/null || {
     exit 1
 }
 
-#ovlmod=overlayfs
-ovlmod=
+ovlmod=""
 
-grep overlayfs /proc/filesystems 1>/dev/null || modprobe overlayfs 2>/dev/null 
-grep overlayfs /proc/filesystems 1>/dev/null && ovlmod=overlayfs
+for v in overlayfs overlay aufs; do
 
-#grep overlayfs /proc/filesystems 1>/dev/null || { 
-#    echo "[w] not have overlayfs"
-#    ovlmod=""
+    [ -d /sys/module/$v ] || { 
+    modprobe $v 2>/dev/null
+    }
+    [ -d /sys/module/$v ] && {
+    ovlmod=$v
+    break
+    }
 
-    grep aufs /proc/filesystems 1>/dev/null || modprobe aufs
+done
 
-#  grep aufs /proc/filesystems 1>/dev/null || { 
-#       echo "[e] not have aufs"
-#       exit 1
-#  }
-
-    grep aufs /proc/filesystems 1>/dev/null && ovlmod=aufs
-
-
-#}
-
-#override mode
-#ovlmod=aufs
-
-[ "$ovlmod" ] || {
-    echo "[e] not have any overlay fs (aufs overlayfs)" 1>&2
-	exit 1
-}
- 
 p=$PWD
 p=.
 
@@ -59,19 +43,20 @@ work_dir=$p/$src
 mount -o ro $sfs $ro_level
 
 case $ovlmod in  
+    overlay)
+    mount -t overlay overlay -o lowerdir=$ro_level,upperdir=$rw_level,workdir=$work_dir \
+    $work_dir
+    break
+    ;;
     overlayfs)
-
-	ver4=
-	modinfo overlayfs | egrep -q "vermagic:\s+4" && ver4=",workdir=$work_dir"
-
-    mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level$ver4 \
-	none $work_dir
-#    break
+    mount -t overlayfs -o lowerdir=$ro_level,upperdir=$rw_level \
+    none $work_dir
+    break
     ;;
     aufs)
     mount -t aufs -o br:$rw_level:$ro_level \
-	none $work_dir
-#    break
+    none $work_dir
+    break
     ;;
 esac
 

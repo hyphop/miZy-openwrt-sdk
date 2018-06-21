@@ -8,16 +8,6 @@
 
 ./mount_overlay_squash
 
-#echo "src-git base git://git.openwrt.org/openwrt.git
-#src-git packages https://github.com/openwrt/packages.git
-#src-link mizy ../../mizy-feeds
-#" > $src/feeds.conf 
-#
-#feeds="$src/scripts/feeds"
-#
-#[ -d $bin ] || mkdir $bin
-#[ -d $dl  ] || mkdir $dl
-
 rm -rf $src/$bin
 ln -s ../$bin $src/$bin
 

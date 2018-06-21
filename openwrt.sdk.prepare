@@ -6,8 +6,8 @@
 
 ./mount_overlay_squash
 
-echo "src-git base git://git.openwrt.org/openwrt.git
-src-git packages https://github.com/openwrt/packages.git
+echo "src-git base git://git.archive.openwrt.org/openwrt.git
+src-git packages https://github.com/openwrt/archive.git
 src-link mizy ../../mizy-feeds
 " > $src/feeds.conf 
 
