@@ -1,5 +1,7 @@
 # miZy-openwrt-sdk
 
+[![Build Status](https://travis-ci.com/hyphop/miZy-openwrt-sdk.svg?branch=master)](https://travis-ci.com/hyphop/miZy-openwrt-sdk)
+
 build openwrt packages for miZy
 
 
